@@ -82,8 +82,8 @@ public class Hardware {
         rearRight.setDirection(DcMotorEx.Direction.FORWARD);
         rearLeft.setDirection(DcMotorEx.Direction.REVERSE);
 
-        liftLeft.setDirection(DcMotor.Direction.FORWARD);
-        liftRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        liftLeft.setDirection(DcMotorEx.Direction.FORWARD);
+        liftRight.setDirection(DcMotorEx.Direction.FORWARD);
 
         liftRotationLeft.setDirection(DcMotorEx.Direction.FORWARD);
         liftRotationRight.setDirection(DcMotorEx.Direction.REVERSE);
@@ -102,6 +102,12 @@ public class Hardware {
 
         liftLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         liftRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+        liftRotationRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        liftRotationLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+        
+
 
         liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
