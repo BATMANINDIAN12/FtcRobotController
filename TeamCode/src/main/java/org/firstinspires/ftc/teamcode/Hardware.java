@@ -1,66 +1,64 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Hardware {
-    public DcMotorEx frontRight =null;
-    public DcMotorEx frontLeft =null;
-    public DcMotorEx rearRight =null;
-    public DcMotorEx rearLeft =null;
+    public DcMotorEx frontRight = null;
+    public DcMotorEx frontLeft = null;
+    public DcMotorEx rearRight = null;
+    public DcMotorEx rearLeft = null;
 
-    public DcMotorEx liftLeft =null;
-    public DcMotorEx liftRight =null;
+    public DcMotorEx liftLeft = null;
+    public DcMotorEx liftRight = null;
 
-    public DcMotorEx liftRotationLeft =null;
-    public DcMotorEx liftRotationRight =null;
-    //servos
-    public DcMotorSimple grabber =null;
+    public DcMotorEx liftRotationLeft = null;
+    public DcMotorEx liftRotationRight = null;
 
-    public DcMotorSimple wristRotation =null;
+    // Servos
+    public Servo grabber = null;
+    public Servo wristRotation = null;
+    public Servo wristAngle = null;
+    public Servo armRight = null;
+    public Servo armLeft = null;
 
-    public DcMotorSimple wristAngle =null;
+    HardwareMap hwMap = null;
 
-    public DcMotorSimple armRight = null;
-    public DcMotorSimple armLeft = null;
-
-
-
-
-    HardwareMap hwMap =null;
-
-    public Hardware(){
+    public Hardware() {
     }
 
-    public void init(HardwareMap ahwMap){
+    public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
-        frontRight = hwMap.get(DcMotorEx.class,"frontRight");
-        frontLeft = hwMap.get(DcMotorEx.class,"frontLeft");
-        rearRight = hwMap.get(DcMotorEx.class,"rearRight");
-        rearLeft = hwMap.get(DcMotorEx.class,"rearLeft");
+        frontRight = hwMap.get(DcMotorEx.class, "frontRight");
+        frontLeft = hwMap.get(DcMotorEx.class, "frontLeft");
+        rearRight = hwMap.get(DcMotorEx.class, "rearRight");
+        rearLeft = hwMap.get(DcMotorEx.class, "rearLeft");
 
-        liftLeft = hwMap.get(DcMotorEx.class,"liftLeft");
+        liftLeft = hwMap.get(DcMotorEx.class, "liftLeft");
         liftRight = hwMap.get(DcMotorEx.class, "liftRight");
 
         liftRotationLeft = hwMap.get(DcMotorEx.class, "liftRotationLeft");
-        liftRotationRight = hwMap.get(DcMotorEx.class, "lifeRotationRight");
+        liftRotationRight = hwMap.get(DcMotorEx.class, "liftRotationRight");
 
-        wristRotation = hwMap.get(DcMotorSimple.class, "wristRotation");
-        wristAngle = hwMap.get(DcMotorSimple.class, "wristAngle");
+        grabber = hwMap.get(Servo.class, "grabber");
+        wristRotation = hwMap.get(Servo.class, "wristRotation");
+        wristAngle = hwMap.get(Servo.class, "wristAngle");
+        armLeft = hwMap.get(Servo.class, "armLeft");
+        armRight = hwMap.get(Servo.class, "armRight");
 
-        armLeft = hwMap.get(DcMotorSimple.class, "armLeft");
-        armRight = hwMap.get(DcMotorSimple.class, "armRight");
+        // Set initial positions for servos
+        grabber.setPosition(0);
+        wristRotation.setPosition(0);
+        wristAngle.setPosition(0);
+        armLeft.setPosition(0);
+        armRight.setPosition(0);
 
-        grabber = hwMap.get(DcMotorSimple.class, "Grabber");
-
-
-        //setPower
+        // Set power for motors
         frontRight.setPower(0);
         frontLeft.setPower(0);
         rearRight.setPower(0);
-        rearRight.setPower(0);
+        rearLeft.setPower(0);
 
         liftLeft.setPower(0);
         liftRight.setPower(0);
@@ -68,15 +66,7 @@ public class Hardware {
         liftRotationRight.setPower(0);
         liftRotationLeft.setPower(0);
 
-        wristRotation.setPower(0);
-        wristAngle.setPower(0);
-
-        armLeft.setPower(0);
-        armRight.setPower(0);
-
-        grabber.setPower(0);
-
-        //setDirection
+        // Set direction for motors
         frontRight.setDirection(DcMotorEx.Direction.FORWARD);
         frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
         rearRight.setDirection(DcMotorEx.Direction.FORWARD);
@@ -88,13 +78,7 @@ public class Hardware {
         liftRotationLeft.setDirection(DcMotorEx.Direction.FORWARD);
         liftRotationRight.setDirection(DcMotorEx.Direction.REVERSE);
 
-        wristRotation.setDirection(DcMotorSimple.Direction.FORWARD);
-        wristAngle.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        grabber.setDirection(DcMotorSimple.Direction.FORWARD);
-
-
-        //encoderVsNoEncoder
+        // Set encoder modes for motors
         frontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         frontLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         rearLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -106,9 +90,10 @@ public class Hardware {
         liftRotationRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         liftRotationLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-        
+        liftRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        liftLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-
-        liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftRotationRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        liftRotationLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 }
