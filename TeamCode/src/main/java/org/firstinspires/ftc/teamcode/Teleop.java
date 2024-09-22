@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range; // Importing the Range class
+
 
 
 /**
@@ -78,30 +81,92 @@ public class Teleop extends LinearOpMode {
                   -Layer one (no buttons)=Grabber:
                      bumper left=layer 2
                      bumper right-layer 3
+                     Left trigger=Grabber open
+                     Right trigger=Grabber close
+                     dpad down=wrist angle straight
+                     dpad up=wrist angle down
+                     dpad left=wrist rotation left
+                     dpad right=wrist rotation right
+                     y=arm up
+                     a=arm down
                   -layer two (Left Bumper)=Elevator:
                      bumper left=layer 2
                      bumper right-layer 3
+                     X=elevator angle up
+                     B=elevator angle down
+                     dpad up=elevator up
+                     dpad down=elevator down
                   -layer 3 (Right bumper):
                      bumper left=layer 2
                      bumper right-layer 3
             */
-            if(gamepad1.left_bumper){
-                robot.grabber.setPower(-1);
-            } else if(gamepad1.right_bumper) {
-                robot.grabber.setPower(1);
-            }else {
-                robot.grabber.setPower(0);
+            if(gamepad2.left_trigger>0){
+                robot.grabber.setPosition(1);
+            } else if(gamepad2.right_trigger>0) {
+                robot.grabber.setPosition(0);
             }
 
-            if(gamepad1.left_bumper) {
-                if (gamepad1.dpad_up) {
+            if(gamepad2.dpad_down){
+                robot.wristAngle.setPosition(1);
+            } else if (gamepad2.dpad_up) {
+                robot.wristAngle.setPosition(0);
+            }
+
+            if(gamepad2.dpad_left){
+                robot.wristRotation.setPosition(1);
+            } else if (gamepad1.dpad_right) {
+                robot.wristRotation.setPosition(-1);
+            } else {
+                robot.wristRotation.setPosition(0);
+            }
+
+            // Declare and initialize variables
+            double armLeftPosition = 0.5; // Initial position of the left arm
+            double armRightPosition = 0.5; // Initial position of the right arm
+            Servo armLeft = hardwareMap.get(Servo.class, "armLeft");
+            Servo armRight = hardwareMap.get(Servo.class, "armRight");
+
+// Incremental control for fine adjustments
+            if (gamepad2.y) {
+                // Increment position
+                armLeftPosition += 0.01;
+                armRightPosition += 0.01;
+            } else if (gamepad1.a) {
+                // Decrement position
+                armLeftPosition -= 0.01;
+                armRightPosition -= 0.01;
+            }
+
+// Ensure the positions stay within bounds
+            armLeftPosition = Range.clip(armLeftPosition, 0.0, 1.0);
+            armRightPosition = Range.clip(armRightPosition, 0.0, 1.0);
+
+// Set the servos to the new positions
+            armLeft.setPosition(armLeftPosition);
+            armRight.setPosition(armRightPosition);
+
+
+            //Layer 2 (Elevator)
+            if(gamepad2.left_bumper) {
+                if (gamepad2.dpad_up) {
                     robot.liftRight.setPower(0.2);
-                } else if (gamepad1.dpad_down) {
+                } else if (gamepad2.dpad_down) {
                     robot.liftRight.setPower(-0.1);
                 } else {
                     robot.liftRight.setPower(0);
                 }
+                if (gamepad2.x) {
+                    robot.liftRotationLeft.setPower(1);
+                    robot.liftRotationRight.setPower(1);
+                } else if (gamepad2.b) {
+                    robot.liftRotationLeft.setPower(-1);
+                    robot.liftRotationRight.setPower(-1);
+                } else {
+                    robot.liftRotationLeft.setPower(0);
+                    robot.liftRotationRight.setPower(0);
+                }
             }
+
 
             //Strafing and Driving
             if (gamepad1.right_trigger > 0) {
@@ -143,7 +208,7 @@ public class Teleop extends LinearOpMode {
                 // Send telemetry message to signify robot running;
                 telemetry.addData("left: ", left);
                 telemetry.addData("right: ", right);
-                telemetry.addData("power", robot.grabber.getPower());
+                //telemetry.addData("power", robot.grabber.getPower());
                 telemetry.update();
             }
 
